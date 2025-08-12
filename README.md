@@ -4,8 +4,6 @@ A classic Tic-Tac-Toe game reimagined with a retro 8-bit aesthetic. This project
 
 **[🚀 Live Demo Link](https://prabhat-16.github.io/retro-tic-tac-toe/)**
 
-![Retro Tic-Tac-Toe Gameplay](https://i.imgur.com/5v4YqG2.png)
-
 ---
 
 ## ✨ Features
