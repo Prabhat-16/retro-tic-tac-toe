@@ -1,0 +1,134 @@
+/* Import the 8-bit gaming font */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+:root {
+  --bg-color: #000;
+  --text-color: #fff;
+  --accent-color: #00ff00; /* Bright green */
+  --x-color: #ff3333; /* Bright red */
+  --o-color: #33ccff; /* Bright blue */
+  --border-color: var(--accent-color);
+  --font-family: 'Press Start 2P', cursive;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  overflow: hidden; /* Important to prevent scrollbars from the canvas */
+  image-rendering: pixelated;
+}
+
+/* --- Styles for the Animated Background --- */
+#starfield-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1; /* This places the canvas BEHIND all other content */
+}
+
+/* --- Main Game Layout --- */
+.game {
+  display: flex;
+  gap: 50px;
+  align-items: flex-start;
+  border: 4px solid var(--border-color);
+  padding: 40px;
+  background: rgba(17, 17, 17, 0.85); /* Slightly transparent background */
+  backdrop-filter: blur(5px); /* Adds a cool blur effect to see the stars behind */
+  box-shadow: 0 0 10px var(--accent-color), inset 0 0 10px var(--accent-color);
+  z-index: 1; /* Ensures game is on top of the background */
+}
+
+.status {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: var(--accent-color);
+  text-shadow: 2px 2px #000;
+  height: 40px;
+}
+
+/* --- The 8-Bit Board and Squares --- */
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-template-rows: repeat(3, 100px);
+  border: 2px solid var(--border-color);
+}
+
+.square {
+  width: 100px;
+  height: 100px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid var(--border-color);
+  color: var(--text-color);
+  font-size: 4rem;
+  font-family: var(--font-family);
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.square:hover:not([disabled]):empty {
+  background: rgba(34, 34, 34, 0.7);
+}
+
+.square[value="X"] { color: var(--x-color); text-shadow: 0 0 5px var(--x-color); }
+.square[value="O"] { color: var(--o-color); text-shadow: 0 0 5px var(--o-color); }
+
+/* --- Winning Animation --- */
+.square.winning {
+  animation: flash 0.5s infinite;
+}
+
+@keyframes flash {
+  0% { background-color: #ffff00; color: #000; } /* Yellow flash */
+  50% { background-color: rgba(0, 0, 0, 0.5); }
+  100% { background-color: #ffff00; color: #000; }
+}
+
+/* --- Game Info Panel & Buttons --- */
+.game-info {
+  width: 250px;
+  text-align: center;
+}
+
+.game-info h3 {
+  color: var(--accent-color);
+  text-shadow: 2px 2px #000;
+}
+
+.game-info ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 270px;
+  overflow-y: auto;
+}
+
+.game-info li button {
+  width: 100%;
+  background: #222;
+  border: 2px solid var(--border-color);
+  color: var(--accent-color);
+  padding: 10px;
+  margin-top: 8px;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 0.7rem;
+  transition: all 0.1s linear;
+}
+
+.game-info li button:hover {
+  background: var(--accent-color);
+  color: #000;
+}
