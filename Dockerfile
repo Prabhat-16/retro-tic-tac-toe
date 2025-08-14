@@ -1,26 +1,34 @@
 # Stage 1: Build the React application
-# Use a more specific and recent version of Node 18 on Alpine
 FROM node:18.20.2-alpine AS build
 
 WORKDIR /app
 
 COPY package*.json ./
-# Use --no-audit to prevent npm from halting on its own audit checks
-RUN npm install --no-audit
+# Install all dependencies (including dev) to build the app
+RUN npm install
 
 COPY . .
 RUN npm run build
 
 # ---
 
-# Stage 2: Serve the application using the latest stable Nginx on Alpine
-FROM nginx:1.27.0-alpine
+# Stage 2: Serve the application using a lean Node.js environment
+FROM node:18.20.2-alpine
 
-# Copy the built static files from the build stage
-COPY --from=build /app/dist /usr/share/nginx/html
+WORKDIR /app
 
-# Expose port 80
-EXPOSE 80
+# Copy package.json and package-lock.json
+COPY package*.json ./
 
-# The default nginx command will start the server
-CMD ["nginx", "-g", "daemon off;"]
+# Install ONLY production dependencies (e.g., 'serve')
+# This respects your .dockerignore because it re-installs from the internet
+RUN npm install --production
+
+# Copy the built application files from the build stage
+COPY --from=build /app/dist ./dist
+
+# Expose the port that 'serve' uses
+EXPOSE 3000
+
+# Use the "start" script from package.json to run the server
+CMD ["npm", "start"]
